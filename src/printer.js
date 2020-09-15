@@ -70,9 +70,11 @@ function printNoParens(path, options, print) {
       ]);
     }
     case "Identifier": {
+      node.inParens = true;
       return node.name;
     }
     case "FunctionDeclaration": {
+      node.inParens = true;
       const isEmpty =
         node.body.length === 0 &&
         (!node.comments || node.comments.length === 0);
@@ -111,19 +113,27 @@ function printNoParens(path, options, print) {
       ]);
     }
     case "StringCallExpression": {
+      node.inParens = true;
+
       return concat([path.call(print, "base"), path.call(print, "argument")]);
     }
     case "TableCallExpression": {
+      node.inParens = true;
       return concat([path.call(print, "base"), path.call(print, "arguments")]);
     }
 
     case "BooleanLiteral":
     case "NilLiteral":
     case "NumericLiteral":
+      node.inParens = true;
     case "VarargLiteral": {
+      node.inParens = true;
+
       return node.raw;
     }
     case "StringLiteral": {
+      node.inParens = true;
+
       if (node.raw[0] === "[") {
         return node.raw;
       } else {
@@ -131,6 +141,8 @@ function printNoParens(path, options, print) {
       }
     }
     case "MemberExpression": {
+      node.inParens = true;
+
       return concat([
         path.call(print, "base"),
         node.indexer,
@@ -138,6 +150,8 @@ function printNoParens(path, options, print) {
       ]);
     }
     case "IndexExpression": {
+      node.inParens = true;
+
       return concat([
         path.call(print, "base"),
         "[",
@@ -146,6 +160,8 @@ function printNoParens(path, options, print) {
       ]);
     }
     case "TableConstructorExpression": {
+      node.inParens = true;
+
       if (node.fields.length === 0) {
         return "{}";
       }
